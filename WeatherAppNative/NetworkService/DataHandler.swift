@@ -18,6 +18,7 @@ struct DataHandler {
             
             switch error {
             case nil: 
+                Storage.save(data: data, fileName: Constants.fileName)
                 do {
                     let weatherData = try JSONDecoder().decode(Weather.self, from: data)
                     DispatchQueue.main.async {
@@ -29,6 +30,18 @@ struct DataHandler {
             default:
                 completion(nil, error)
             }
+        }
+    }
+    
+    static func getWeatherFromCache(completion: @escaping (Weather) -> Void) {
+        guard let dataFromFile = Storage.read(fileName: Constants.fileName) else { return }
+        do {
+            let weatherData = try JSONDecoder().decode(Weather.self, from: dataFromFile)   
+            DispatchQueue.main.async {
+                completion(weatherData)
+            }
+        } catch let jsonError {
+            print("Failed to decode JSON ", jsonError)
         }
     }
 }

@@ -24,6 +24,13 @@ class ViewModel {
     init(weather: Weather) {
         self.weather = weather
     }
+    
+    func getWeatherFromCache() {
+        DataHandler.getWeatherFromCache { [weak self] (weather) in
+            guard let self = self else {return}
+            self.viewModelDelegate?.useData(weather)
+        }
+    }
 }
 
 extension ViewModel: LocationDelegate {

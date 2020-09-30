@@ -75,6 +75,8 @@ class ViewController: UIViewController {
         viewModel = ViewModel(weather: weatherData)
         viewModel.viewModelDelegate = self
         
+        viewModel.getWeatherFromCache()
+        
         configureLocationManager()
         APIHandler.viewController = self
     }
