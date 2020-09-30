@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 class ViewController: UIViewController {
     
@@ -21,14 +22,13 @@ class ViewController: UIViewController {
         let label = UILabel()
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 32)
-        label.text = "London"
         return label
     }()
     
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.text = "clear sky"
+        label.text = "--"
         return label
     }()
     
@@ -36,11 +36,11 @@ class ViewController: UIViewController {
         let label = UILabel()
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 75, weight: .thin)
-        label.text = "15°"
+        label.text = "--°"
         return label
     }()
     
-    let tableView: UITableView = {
+    private let tableView: UITableView = {
         let frame = CGRect(x: 0, y: 0, width: 0, height: 0)
         let tableView = UITableView(frame: frame, style: .grouped)
         tableView.showsVerticalScrollIndicator = false
@@ -49,15 +49,43 @@ class ViewController: UIViewController {
         return tableView
     }()
     
+    var viewModel: ViewModel! {
+        didSet {
+            let data = Converter.convert(viewModel)
+            locationLabel.text = data.city
+            descriptionLabel.text = data.description
+            temperatureLabel.text = String(data.temperature) + "°"
+        }
+    }
+    
+    private var locationManagerDelegate: LocationManagerDelegate?
+    private var locationManager = CLLocationManager()
+    
     override func loadView() {
         super.loadView()
         view = backgroundView
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
         configureTableView()
+        
+        let weatherData = Weather(lat: 0.0, lon: 0.0, timezone: "--", current: nil, hourly: nil, daily: nil)
+        viewModel = ViewModel(weather: weatherData)
+        viewModel.viewModelDelegate = self
+        
+        configureLocationManager()
+        APIHandler.viewController = self
+    }
+    
+    private func configureLocationManager() {
+        locationManagerDelegate = LocationManagerDelegate()
+        locationManager.delegate = locationManagerDelegate
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+        locationManagerDelegate?.locationDelegate = self.viewModel
     }
     
     private func configure() {
@@ -86,9 +114,18 @@ class ViewController: UIViewController {
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        tableView.delegate = self
         tableView.dataSource = self
         tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.reuseID)
+    }
+}
+
+extension ViewController: ViewModelDelegate {
+    func useData(_ data: Weather) {
+        viewModel = ViewModel(weather: data)
+    }
+    
+    func updateData(_ data: Weather) {
+        viewModel = ViewModel(weather: data)
     }
 }
 
@@ -108,8 +145,5 @@ extension ViewController: UITableViewDataSource {
         cell.layer.backgroundColor = UIColor.clear.cgColor
         return cell
     }
-}
-
-extension ViewController: UITableViewDelegate {
 }
 
