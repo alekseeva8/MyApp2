@@ -10,7 +10,7 @@ import Foundation
 
 struct Converter {
     
-    static func convertCurrentWeather(_ viewModel: ViewModel) -> (city: String, description: String, temperature: Int) {
+    static func convertCurrentWeather(_ viewModel: ViewModel) -> (city: String, description: String, temperature: String) {
         
         let timezone = viewModel.weather.timezone
         let timezoneSplitted = timezone.split(separator: "/")
@@ -20,7 +20,8 @@ struct Converter {
         let description = viewModel.weather.current?.weather.first?.description ?? ""
         
         let tempDouble = viewModel.weather.current?.temp ?? 0.0
-        let temperature = Int(tempDouble.rounded())
+        let tempInt = Int(tempDouble.rounded())
+        let temperature = String(tempInt)
         
         return (city, description, temperature)
     }
@@ -43,6 +44,7 @@ struct Converter {
         let date = Date(timeIntervalSince1970: TimeInterval(unixTime))
         let formatter = DateFormatter()
         formatter.dateFormat = dateFormat
+        formatter.timeZone = .current
         return formatter.string(from: date)
     }
 }

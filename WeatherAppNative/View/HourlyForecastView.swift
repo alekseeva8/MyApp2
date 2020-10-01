@@ -50,23 +50,26 @@ extension HourlyForecastView: UICollectionViewDataSource {
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyForecastCell.reuseID, for: indexPath) as? HourlyForecastCell else {return UICollectionViewCell()}
         
-        if let hourlyForecast = viewModel.weather.hourly {
-            let hourForecast = hourlyForecast[indexPath.item]
-            let data = Converter.convertHourForecast(hourForecast)
-            
-            switch indexPath.item {
-            case 0:
-                cell.hour = "Now"
-                cell.hourLabel.font = UIFont.systemFont(ofSize: 20.0, weight: .medium)
-                cell.temperatureLabel.font = UIFont.systemFont(ofSize: 20.0, weight: .medium)
-            default:
-                cell.hour = data.hour
+        switch indexPath.item {
+        case 0:
+            cell.hour = "Now"
+            cell.hourLabel.font = UIFont.systemFont(ofSize: 20.0, weight: .medium)
+            cell.temperatureLabel.font = UIFont.systemFont(ofSize: 20.0, weight: .medium)
+            if let data = viewModel.weather.current?.weather.first {
+                cell.weatherCode = data.icon
             }
+            let temperature = Converter.convertCurrentWeather(viewModel).temperature
+            cell.temperature = temperature + "°"
             
-            cell.weatherCode = data.icon
-            cell.temperature = data.temperature + "°"
+        default: 
+            if let hourlyForecast = viewModel.weather.hourly {
+                let hourForecast = hourlyForecast[indexPath.item]
+                let data = Converter.convertHourForecast(hourForecast)
+                cell.hour = data.hour
+                cell.weatherCode = data.icon
+                cell.temperature = data.temperature + "°"
+            }
         }
-        
         return cell
     }
 }

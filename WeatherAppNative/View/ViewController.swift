@@ -54,7 +54,7 @@ class ViewController: UIViewController {
             let data = Converter.convertCurrentWeather(viewModel)
             locationLabel.text = data.city
             descriptionLabel.text = data.description
-            temperatureLabel.text = String(data.temperature) + "°"
+            temperatureLabel.text = data.temperature + "°"
         }
     }
     
