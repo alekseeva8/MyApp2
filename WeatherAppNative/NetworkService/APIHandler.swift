@@ -27,6 +27,7 @@ struct APIHandler {
             .build()
         
         guard let url = optURL else {return}
+        print(url)
         
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             switch error {

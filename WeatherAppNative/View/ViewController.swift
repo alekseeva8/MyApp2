@@ -51,7 +51,7 @@ class ViewController: UIViewController {
     
     var viewModel: ViewModel! {
         didSet {
-            let data = Converter.convert(viewModel)
+            let data = Converter.convertCurrentWeather(viewModel)
             locationLabel.text = data.city
             descriptionLabel.text = data.description
             temperatureLabel.text = String(data.temperature) + "°"
@@ -118,16 +118,19 @@ class ViewController: UIViewController {
         
         tableView.dataSource = self
         tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.reuseID)
+        tableView.delegate = self
     }
 }
 
 extension ViewController: ViewModelDelegate {
     func useData(_ data: Weather) {
         viewModel = ViewModel(weather: data)
+        tableView.reloadData()
     }
     
     func updateData(_ data: Weather) {
         viewModel = ViewModel(weather: data)
+        tableView.reloadData()
     }
 }
 
@@ -146,6 +149,17 @@ extension ViewController: UITableViewDataSource {
         cell.detailTextLabel?.text = "123"
         cell.layer.backgroundColor = UIColor.clear.cgColor
         return cell
+    }
+}
+
+extension ViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        120
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        HourlyForecastView(viewModel: viewModel)    
     }
 }
 
