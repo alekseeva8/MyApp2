@@ -51,7 +51,7 @@ class ViewController: UIViewController {
     
     var viewModel: ViewModel! {
         didSet {
-            let data = Converter.convertCurrentWeather(viewModel)
+            let data = Converter.convert(viewModel)
             locationLabel.text = data.city
             descriptionLabel.text = data.description
             temperatureLabel.text = data.temperature + "°"
@@ -117,8 +117,9 @@ class ViewController: UIViewController {
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         tableView.dataSource = self
-        tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.reuseID)
         tableView.delegate = self
+        tableView.register(DailyForecastCell.self, forCellReuseIdentifier: DailyForecastCell.reuseID)
+        tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.reuseID)
     }
 }
 
@@ -145,9 +146,23 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.reuseID, for: indexPath) as! TableViewCell
-        cell.detailTextLabel?.text = "123"
-        cell.layer.backgroundColor = UIColor.clear.cgColor
+        var cell = UITableViewCell()
+        
+        let dailyCount = viewModel.weather.daily?.count ?? 0
+        let daysCount = dailyCount - 1
+        let isDailyForecastRow = indexPath.row < daysCount
+        
+        switch  isDailyForecastRow {
+        case true:
+            if let daily = viewModel.weather.daily?[indexPath.row+1] {
+                let cellModel = DailyForecastCellModel(daily: daily)
+                cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
+            }
+        default:
+            cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.reuseID, for: indexPath) as! TableViewCell
+            cell.detailTextLabel?.text = "123"
+            cell.layer.backgroundColor = UIColor.clear.cgColor
+        }
         return cell
     }
 }

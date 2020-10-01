@@ -19,7 +19,7 @@ class HourlyForecastCell: UICollectionViewCell {
         return label
     }()
     
-    let imageView = UIImageView()
+    private let imageView = UIImageView()
     
     let temperatureLabel: UILabel = {
         let label = UILabel()
