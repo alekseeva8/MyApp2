@@ -120,6 +120,7 @@ class ViewController: UIViewController {
         tableView.delegate = self
         tableView.register(DailyForecastCell.self, forCellReuseIdentifier: DailyForecastCell.reuseID)
         tableView.register(DescriptionCell.self, forCellReuseIdentifier: DescriptionCell.reuseID)
+        tableView.register(CurrentWeatherCell.self, forCellReuseIdentifier: CurrentWeatherCell.reuseID)
         tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.reuseID)
     }
 }
@@ -143,7 +144,9 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        20
+        let dailyCount = viewModel.weather.daily?.count ?? 0
+        let daysCount = dailyCount - 1
+        return daysCount + 6
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -161,14 +164,30 @@ extension ViewController: UITableViewDataSource {
             }
         default:
             let startIndex = daysCount
+            let currentWeather = Converter.convert(viewModel)
             if indexPath.row == startIndex {
                 let cellModel = DescriptionCellModel(viewModel: viewModel)
                 cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
             }
-            else {
-                cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.reuseID, for: indexPath) as! TableViewCell
-                cell.detailTextLabel?.text = "123"
-                cell.layer.backgroundColor = UIColor.clear.cgColor
+            if indexPath.row == startIndex + 1 {
+                let cellModel = CurrentWeatherCelllModel(leftTopLabelName: "SUNRISE", leftBottomLabelName: currentWeather.sunriseTime, rightTopLabelName: "SUNSET", rightBottomLabelName: currentWeather.sunsetTime)
+                cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
+            }
+            if indexPath.row == startIndex + 2 {
+                let cellModel = CurrentWeatherCelllModel(leftTopLabelName: "CLOUDINESS", leftBottomLabelName: currentWeather.cloudiness, rightTopLabelName: "HUMIDITY", rightBottomLabelName: currentWeather.humidity + " %")
+                cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
+            }
+            if indexPath.row == startIndex + 3 {
+                let cellModel = CurrentWeatherCelllModel(leftTopLabelName: "WIND", leftBottomLabelName: currentWeather.windSpeed, rightTopLabelName: "FEELS LIKE", rightBottomLabelName: currentWeather.feelsLike)
+                cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
+            }
+            if indexPath.row == startIndex + 4 {
+                let cellModel = CurrentWeatherCelllModel(leftTopLabelName: "PRECIPITATION", leftBottomLabelName: currentWeather.precipitation, rightTopLabelName: "PRESSURE", rightBottomLabelName: currentWeather.pressure)
+                cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
+            }
+            if indexPath.row == startIndex + 5 {
+                let cellModel = CurrentWeatherCelllModel(leftTopLabelName: "VISIBILITY", leftBottomLabelName: currentWeather.visibility, rightTopLabelName: "UV INDEX", rightBottomLabelName: currentWeather.uvindex)
+                cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
             }
         }
         return cell
@@ -191,8 +210,8 @@ extension ViewController: UITableViewDelegate {
         switch indexPath.row {
         case daysCount:
             return 70
-        case daysCount + 1:
-            return 60
+        case daysCount + 1, daysCount + 2, daysCount + 3, daysCount + 4, daysCount + 5:
+            return 65
         default:
             return 40
         }
