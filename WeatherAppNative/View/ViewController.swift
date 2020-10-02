@@ -119,6 +119,7 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(DailyForecastCell.self, forCellReuseIdentifier: DailyForecastCell.reuseID)
+        tableView.register(DescriptionCell.self, forCellReuseIdentifier: DescriptionCell.reuseID)
         tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.reuseID)
     }
 }
@@ -159,9 +160,16 @@ extension ViewController: UITableViewDataSource {
                 cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
             }
         default:
-            cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.reuseID, for: indexPath) as! TableViewCell
-            cell.detailTextLabel?.text = "123"
-            cell.layer.backgroundColor = UIColor.clear.cgColor
+            let startIndex = daysCount
+            if indexPath.row == startIndex {
+                let cellModel = DescriptionCellModel(viewModel: viewModel)
+                cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
+            }
+            else {
+                cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.reuseID, for: indexPath) as! TableViewCell
+                cell.detailTextLabel?.text = "123"
+                cell.layer.backgroundColor = UIColor.clear.cgColor
+            }
         }
         return cell
     }
@@ -175,6 +183,19 @@ extension ViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         HourlyForecastView(viewModel: viewModel)    
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let dailyCount = viewModel.weather.daily?.count ?? 0
+        let daysCount = dailyCount - 1
+        switch indexPath.row {
+        case daysCount:
+            return 70
+        case daysCount + 1:
+            return 60
+        default:
+            return 40
+        }
     }
 }
 
