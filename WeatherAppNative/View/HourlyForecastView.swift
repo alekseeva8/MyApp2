@@ -18,7 +18,7 @@ class HourlyForecastView: UIView {
     init(viewModel: ViewModel) {
         
         self.viewModel = viewModel
-
+        
         let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width + 2 , height: headerViewHight)
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal

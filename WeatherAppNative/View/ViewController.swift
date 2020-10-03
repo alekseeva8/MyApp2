@@ -269,7 +269,7 @@ extension ViewController {
         if scrollView.contentOffset.y >= 0.0 {
             let offset = abs(pow(scrollView.contentOffset.y, 1.1))
             if let temperatureCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) {
-               changeTransparency(of: temperatureCell, offset: offset) 
+                changeTransparency(of: temperatureCell, offset: offset) 
             }
             if let todayCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) {
                 changeTransparency(of: todayCell, offset: offset)
@@ -277,15 +277,15 @@ extension ViewController {
         }
         
         for cell in tableView.visibleCells {
-             let paddingToDisapear = headerViewHight
-             let hiddenFrameHeight = scrollView.contentOffset.y + paddingToDisapear - cell.frame.origin.y
-             if (hiddenFrameHeight >= 0 || hiddenFrameHeight <= cell.frame.size.height) {
+            let paddingToDisapear = headerViewHight
+            let hiddenFrameHeight = scrollView.contentOffset.y + paddingToDisapear - cell.frame.origin.y
+            if (hiddenFrameHeight >= 0 || hiddenFrameHeight <= cell.frame.size.height) {
                 let temperatureCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0))
                 if cell != temperatureCell {
-                     mask(cell: cell, fromTop: hiddenFrameHeight)
+                    mask(cell: cell, fromTop: hiddenFrameHeight)
                 }
-             }
-         }
+            }
+        }
     }
     
     // MARK: - make cells invisible under the headerView

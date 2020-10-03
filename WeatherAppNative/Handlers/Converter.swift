@@ -65,7 +65,7 @@ struct Converter {
             case 0:
                 visibility = String(visibilityInt/1000) + " km"
             default:
-            visibility = String(visibilityInt/1000) + "," + String(visabilityDecimal) + " km"
+                visibility = String(visibilityInt/1000) + "," + String(visabilityDecimal) + " km"
             }
         }
         
@@ -130,22 +130,22 @@ struct Converter {
         let date = Date(timeIntervalSince1970: TimeInterval(unixTime))
         let calendar = Calendar(identifier: .gregorian)
         switch calendar.component(.weekday, from: date) {
-            case 1:
-                return "Sunday"
-            case 2:
-                return "Monday"
-            case 3:
-                return "Tuesday"
-            case 4:
-                return "Wednesday"
-            case 5:
-                return "Thursday"
-            case 6:
-                return "Friday"
-            case 7:
-                return "Saturday"
-            default:
-                return ""
+        case 1:
+            return "Sunday"
+        case 2:
+            return "Monday"
+        case 3:
+            return "Tuesday"
+        case 4:
+            return "Wednesday"
+        case 5:
+            return "Thursday"
+        case 6:
+            return "Friday"
+        case 7:
+            return "Saturday"
+        default:
+            return ""
         }
     }
 }
