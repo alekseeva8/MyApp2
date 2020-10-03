@@ -12,14 +12,14 @@ class DescriptionCell: UITableViewCell {
     
     static let reuseID = "DescriptionCell"
     
-var viewModel: ViewModel! {
-    didSet {
-        let data = Converter.convert(viewModel)
-        guard let today = viewModel.weather.daily?.first else {return}
-        let todayData = Converter.convert(today)
-        descriptionLabel.text = "Today: \(data.description). The highest temperature is \(todayData.tempMax). The lowest temperature is \(todayData.tempMin)."
+    var viewModel: ViewModel! {
+        didSet {
+            let data = Converter.convert(viewModel)
+            guard let today = viewModel.weather.daily?.first else {return}
+            let todayData = Converter.convert(today)
+            descriptionLabel.text = "Today: \(data.description). The highest temperature is \(todayData.tempMax)°C. The lowest temperature is \(todayData.tempMin)°C."
+        }
     }
-}
     
     private let descriptionLabel: UILabel = {
         let label = UILabel()

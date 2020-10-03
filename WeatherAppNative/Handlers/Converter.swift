@@ -22,10 +22,14 @@ struct Converter {
         let tempDouble = viewModel.weather.current?.temp ?? 0.0
         let temperature = convert(tempDouble)
         
-        let sunriseUnixTime = viewModel.weather.current?.sunrise ?? 0
-        let sunriseTime = convert(unixTime: sunriseUnixTime, with: "HH:mm")
-        let sunsetUnixTime = viewModel.weather.current?.sunset ?? 0
-        let sunsetTime = convert(unixTime: sunsetUnixTime, with: "HH:mm")
+        var sunriseTime = ""
+        if let sunriseUnixTime = viewModel.weather.current?.sunrise {
+            sunriseTime = convert(unixTime: sunriseUnixTime, with: "HH:mm")
+        }
+        var sunsetTime = ""
+        if let sunsetUnixTime = viewModel.weather.current?.sunset {
+            sunsetTime = convert(unixTime: sunsetUnixTime, with: "HH:mm")
+        }
         
         let humidityInt = viewModel.weather.current?.humidity
         let humidity = humidityInt?.description ?? "--"
@@ -35,7 +39,7 @@ struct Converter {
             precipitation = convert(precipitationDouble) + " mm"
         }
         
-        var windSpeed = "0 km/h"
+        var windSpeed = "-- km/h"
         if let windSpeedDouble = viewModel.weather.current?.windSpeed {
             let windSpeedDoubleKmh = windSpeedDouble * 3.6
             windSpeed = convert(windSpeedDoubleKmh) + " km/h"
@@ -53,9 +57,16 @@ struct Converter {
         
         var visibility = "-- km"
         if let visibilityInt = viewModel.weather.current?.visibility {
-            let visibility1 = visibilityInt/1000
-            let visibility2 = visibilityInt % 1000
-            visibility = String(visibility1) + "," + String(visibility2) + " km"
+            var visabilityDecimal = (visibilityInt % 1000)/100
+            if (visibilityInt % 100) >= 50 {
+                visabilityDecimal += 1
+            }
+            switch visabilityDecimal {
+            case 0:
+                visibility = String(visibilityInt/1000) + " km"
+            default:
+            visibility = String(visibilityInt/1000) + "," + String(visabilityDecimal) + " km"
+            }
         }
         
         var uvindex = "--"

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol TableViewCellModel {
-    associatedtype CellType: UIView
+    associatedtype CellType: UITableViewCell
     func set(_ cell: CellType)
 }
 
@@ -23,7 +23,7 @@ struct DailyForecastCellModel: TableViewCellModel {
 
 struct DescriptionCellModel: TableViewCellModel {
     
-    var viewModel: ViewModel
+    let viewModel: ViewModel
     func set(_ cell: DescriptionCell) {
         cell.viewModel = viewModel
     }
@@ -40,5 +40,21 @@ struct CurrentWeatherCelllModel: TableViewCellModel {
         cell.leftBottomLabelName = leftBottomLabelName
         cell.rightTopLabelName = rightTopLabelName
         cell.rightBottomLabelName = rightBottomLabelName
+    }
+}
+
+struct TemperatureCellModel: TableViewCellModel {
+    
+    let viewModel: ViewModel
+    func set(_ cell: TemperatureCell) {
+        cell.viewModel = viewModel
+    }
+}
+
+struct TodayCellModel: TableViewCellModel {
+    
+    let daily: Daily
+    func set(_ cell: TodayCell) {
+        cell.daily = daily
     }
 }

@@ -13,11 +13,13 @@ class HourlyForecastView: UIView {
     private let collectionView: UICollectionView
     private var viewModel: ViewModel
     
+    private let headerViewHight = CGFloat(120)
+    
     init(viewModel: ViewModel) {
         
         self.viewModel = viewModel
 
-        let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width + 2 , height: 120)
+        let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width + 2 , height: headerViewHight)
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 20.0)
@@ -25,7 +27,7 @@ class HourlyForecastView: UIView {
         collectionView = UICollectionView(frame: frame, collectionViewLayout: layout)
         collectionView.showsHorizontalScrollIndicator = false
         
-        super.init(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: 120.0))
+        super.init(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: headerViewHight))
         
         addSubview(collectionView)
         collectionView.backgroundColor = .clear
