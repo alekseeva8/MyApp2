@@ -41,8 +41,6 @@ class ViewController: UIViewController {
         return tableView
     }()
     
-    private let headerViewHight = CGFloat(120)
-    
     var viewModel: ViewModel! {
         didSet {
             let data = Converter.convert(viewModel)
@@ -53,6 +51,15 @@ class ViewController: UIViewController {
     
     private var locationManagerDelegate: LocationManagerDelegate?
     private var locationManager = CLLocationManager()
+    
+    private let headerViewHight = CGFloat(120)
+    
+    private enum SectionCategory {
+    case firstSection 
+    case secondSection
+    }
+    
+    private let sections: [SectionCategory] = [.firstSection, .secondSection]
     
     override func loadView() {
         super.loadView()
@@ -109,7 +116,6 @@ class ViewController: UIViewController {
         tableView.register(CurrentWeatherCell.self, forCellReuseIdentifier: CurrentWeatherCell.reuseID)
         tableView.register(TemperatureCell.self, forCellReuseIdentifier: TemperatureCell.reuseID)
         tableView.register(TodayCell.self, forCellReuseIdentifier: TodayCell.reuseID)
-        tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.reuseID)
     }
 }
 
@@ -133,27 +139,25 @@ extension ViewController: ViewModelDelegate {
 extension ViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        2
+        sections.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0: 
+        switch sections[section] {
+        case .firstSection: 
             return 2
-        case 1:
+        case .secondSection:
             let dailyCount = viewModel.weather.daily?.count ?? 0
             let daysCount = dailyCount - 1
             return daysCount + 6
-        default:
-            return 0
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         
-        switch indexPath.section {
-        case 0:
+        switch sections[indexPath.section] {
+        case .firstSection:
             switch indexPath.row {
             case 0:
                 let cellModel = TemperatureCellModel(viewModel: viewModel)
@@ -164,7 +168,7 @@ extension ViewController: UITableViewDataSource {
                     cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
                 }
             }
-        case 1:
+        case .secondSection:
             let dailyCount = viewModel.weather.daily?.count ?? 0
             let daysCount = dailyCount - 1
             let isDailyForecastRow = indexPath.row < daysCount
@@ -203,7 +207,6 @@ extension ViewController: UITableViewDataSource {
                     cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
                 }
             }
-        default: cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.reuseID, for: indexPath)
         }
         return cell
     }
@@ -213,39 +216,33 @@ extension ViewController: UITableViewDataSource {
 extension ViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch  section {
-        case 0:
+        switch sections[section] {
+        case .firstSection:
             return 0
-        case 1:
+        case .secondSection:
             return headerViewHight
-        default:
-            return 0
         }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        switch  section {
-        case 0:
+        switch sections[section] {
+        case .firstSection:
             return nil
-        case 1:
+        case .secondSection:
             return HourlyForecastView(viewModel: viewModel)
-        default:
-            return nil
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0:
+        switch sections[indexPath.section] {
+        case .firstSection:
             switch indexPath.row {
             case 0:
                 return 140
-            case 1:
-                return 40
             default:
-                return 0
+                return 40
             }
-        case 1: 
+        case .secondSection: 
             let dailyCount = viewModel.weather.daily?.count ?? 0
             let daysCount = dailyCount - 1
             switch indexPath.row {
@@ -256,8 +253,6 @@ extension ViewController: UITableViewDelegate {
             default:
                 return 40
             }
-        default:
-            return 0
         }
     }
 }

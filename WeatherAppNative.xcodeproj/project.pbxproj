@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F369BFD325221FB70039EBC0 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F369BFD225221FB70039EBC0 /* TableViewCell.swift */; };
 		F3CBC7712523369600F8AF7C /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3CBC7702523369600F8AF7C /* URLBuilder.swift */; };
 		F3CBC7732523379900F8AF7C /* APIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3CBC7722523379900F8AF7C /* APIHandler.swift */; };
 		F3CBC776252339DD00F8AF7C /* LocationManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3CBC775252339DD00F8AF7C /* LocationManagerDelegate.swift */; };
@@ -36,7 +35,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F369BFD225221FB70039EBC0 /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		F3CBC7702523369600F8AF7C /* URLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilder.swift; sourceTree = "<group>"; };
 		F3CBC7722523379900F8AF7C /* APIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIHandler.swift; sourceTree = "<group>"; };
 		F3CBC775252339DD00F8AF7C /* LocationManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManagerDelegate.swift; sourceTree = "<group>"; };
@@ -81,7 +79,6 @@
 			isa = PBXGroup;
 			children = (
 				F3E394312521CB7F007F983F /* ViewController.swift */,
-				F369BFD225221FB70039EBC0 /* TableViewCell.swift */,
 				F3CBC78C2524B34900F8AF7C /* HourlyForecastView.swift */,
 				F3CBC78A2524AD1900F8AF7C /* HourlyForecastCell.swift */,
 				F3E2AEEF252617FF00C5F980 /* DailyForecastCell.swift */,
@@ -277,7 +274,6 @@
 				F3CBC78225234B8200F8AF7C /* Weather.swift in Sources */,
 				F3E2AEF425265CC300C5F980 /* UITableView.swift in Sources */,
 				F3E2AEF8252705DD00C5F980 /* TableViewCellModel.swift in Sources */,
-				F369BFD325221FB70039EBC0 /* TableViewCell.swift in Sources */,
 				F3CBC77E2523419C00F8AF7C /* DataHandler.swift in Sources */,
 				F3CBC7732523379900F8AF7C /* APIHandler.swift in Sources */,
 				F3E3942E2521CB7F007F983F /* AppDelegate.swift in Sources */,
