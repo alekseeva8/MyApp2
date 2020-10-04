@@ -12,12 +12,7 @@ class TemperatureCell: UITableViewCell {
     
     static let reuseID = "TemperatureCell"
     
-    var viewModel: ViewModel! {
-        didSet {
-            let data = Converter.convert(viewModel)
-            temperatureLabel.text = data.temperature + "°"
-        }
-    }
+    var temperature: String?
     
     private let temperatureLabel: UILabel = {
         let label = UILabel()
@@ -41,5 +36,9 @@ class TemperatureCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func draw(_ rect: CGRect) {
+        temperatureLabel.text = temperature
     }
 }

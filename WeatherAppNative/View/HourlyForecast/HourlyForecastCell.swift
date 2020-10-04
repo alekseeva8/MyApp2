@@ -12,6 +12,10 @@ class HourlyForecastCell: UICollectionViewCell {
     
     static let reuseID = "HourlyForecastCell"
     
+    var icon: String?
+    var hour: String?
+    var temperature: String?
+    
     let hourLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20)
@@ -27,10 +31,6 @@ class HourlyForecastCell: UICollectionViewCell {
         label.textColor = .white
         return label
     }()
-    
-    var weatherCode: String?
-    var hour: String?
-    var temperature: String?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -60,8 +60,8 @@ class HourlyForecastCell: UICollectionViewCell {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         hourLabel.text = hour
-        if let weatherCode = weatherCode, weatherCode != "" {
-            imageView.image = UIImage(named: weatherCode)
+        if let icon = icon, icon != "" {
+            imageView.image = UIImage(named: icon)
         }
         temperatureLabel.text = temperature
     }

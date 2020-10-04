@@ -58,7 +58,7 @@ extension HourlyForecastView: UICollectionViewDataSource {
             cell.hourLabel.font = UIFont.systemFont(ofSize: 20.0, weight: .medium)
             cell.temperatureLabel.font = UIFont.systemFont(ofSize: 20.0, weight: .medium)
             if let data = viewModel.weather.current?.weather.first {
-                cell.weatherCode = data.icon
+                cell.icon = data.icon
             }
             let temperature = Converter.convert(viewModel).temperature
             cell.temperature = temperature + "°"
@@ -68,7 +68,7 @@ extension HourlyForecastView: UICollectionViewDataSource {
                 let hourForecast = hourlyForecast[indexPath.item]
                 let data = Converter.convert(hourForecast)
                 cell.hour = data.hour
-                cell.weatherCode = data.icon
+                cell.icon = data.icon
                 cell.temperature = data.temperature + "°"
             }
         }

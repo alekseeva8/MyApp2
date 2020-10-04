@@ -16,7 +16,7 @@ protocol LocationDelegate: class {
 class LocationManagerDelegate: NSObject, CLLocationManagerDelegate {
     
     private let locationManager = CLLocationManager()
-    var locationDelegate: LocationDelegate?
+    weak var locationDelegate: LocationDelegate?
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         

@@ -17,7 +17,7 @@ protocol ViewModelDelegate: class {
 
 class ViewModel {
     
-    var viewModelDelegate: ViewModelDelegate?
+    weak var viewModelDelegate: ViewModelDelegate?
     var weather: Weather
     private var dataHasReceived = false
     

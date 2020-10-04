@@ -12,15 +12,9 @@ class TodayCell: UITableViewCell {
     
     static let reuseID = "TodayCell"
     
-    var daily: Daily! {
-        didSet {
-            let data = Converter.convert(daily)
-            weekDayLabel.text = data.weekDay
-            todayLabel.text = "TODAY"
-            tempMaxLabel.text = data.tempMax
-            tempMinLabel.text = data.tempMin
-        }
-    }
+    var weekDay: String?
+    var temMin: String?
+    var tempMax: String?
     
     private let weekDayLabel: UILabel = {
         let label = UILabel()
@@ -73,5 +67,12 @@ class TodayCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func draw(_ rect: CGRect) {
+        weekDayLabel.text = weekDay
+        todayLabel.text = "TODAY"
+        tempMaxLabel.text = tempMax
+        tempMinLabel.text = temMin
     }
 }

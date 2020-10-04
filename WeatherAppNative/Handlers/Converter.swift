@@ -20,7 +20,7 @@ struct Converter {
         let description = viewModel.weather.current?.weather.first?.main ?? ""
         
         let tempDouble = viewModel.weather.current?.temp ?? 0.0
-        let temperature = convert(tempDouble)
+        let temperature = convert(tempDouble) + "°"
         
         var sunriseTime = ""
         if let sunriseUnixTime = viewModel.weather.current?.sunrise {

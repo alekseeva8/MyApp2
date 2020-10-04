@@ -111,14 +111,15 @@ class ViewController: UIViewController {
         
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.register(TemperatureCell.self, forCellReuseIdentifier: TemperatureCell.reuseID)
+        tableView.register(TodayCell.self, forCellReuseIdentifier: TodayCell.reuseID)
         tableView.register(DailyForecastCell.self, forCellReuseIdentifier: DailyForecastCell.reuseID)
         tableView.register(DescriptionCell.self, forCellReuseIdentifier: DescriptionCell.reuseID)
         tableView.register(CurrentWeatherCell.self, forCellReuseIdentifier: CurrentWeatherCell.reuseID)
-        tableView.register(TemperatureCell.self, forCellReuseIdentifier: TemperatureCell.reuseID)
-        tableView.register(TodayCell.self, forCellReuseIdentifier: TodayCell.reuseID)
     }
 }
 
+//MARK: - ViewModelDelegate
 extension ViewController: ViewModelDelegate {
     func useData(_ data: Weather) {
         viewModel = ViewModel(weather: data)
@@ -155,16 +156,21 @@ extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
+        let currentWeather = Converter.convert(viewModel)
         
         switch sections[indexPath.section] {
         case .firstSection:
             switch indexPath.row {
             case 0:
-                let cellModel = TemperatureCellModel(viewModel: viewModel)
+                //let cellModel = TemperatureCellModel(viewModel: viewModel)
+                //let data = Converter.convert(viewModel)
+                let cellModel = TemperatureCellModel(temperature: currentWeather.temperature)
                 cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
             default:
                 if let daily = viewModel.weather.daily?[indexPath.row] {
-                    let cellModel = TodayCellModel(daily: daily)
+                    //let cellModel = TodayCellModel(daily: daily)
+                    let data = Converter.convert(daily)
+                    let cellModel = TodayCellModel(weekDay: data.weekDay, temMin: data.tempMin, tempMax: data.tempMax)
                     cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
                 }
             }
@@ -176,7 +182,9 @@ extension ViewController: UITableViewDataSource {
             switch  isDailyForecastRow {
             case true:
                 if let daily = viewModel.weather.daily?[indexPath.row+1] {
-                    let cellModel = DailyForecastCellModel(daily: daily)
+                    //let cellModel = DailyForecastCellModel(daily: daily)
+                    let data = Converter.convert(daily)
+                    let cellModel = DailyForecastCellModel(weekDay: data.weekDay, icon: data.icon, temMin: data.tempMin, tempMax: data.tempMax)
                     cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
                     if indexPath.row == daysCount-1 {
                         cell.separatorInset = UIEdgeInsets.zero
@@ -184,29 +192,34 @@ extension ViewController: UITableViewDataSource {
                 }
             default:
                 let startIndex = daysCount
-                let currentWeather = Converter.convert(viewModel)
+                //let currentWeather = Converter.convert(viewModel)
                 if indexPath.row == startIndex {
-                    let cellModel = DescriptionCellModel(viewModel: viewModel)
-                    cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
+                    //let cellModel = DescriptionCellModel(viewModel: viewModel)
+                    if let today = viewModel.weather.daily?.first {
+                        let todayData = Converter.convert(today)
+                        let text = "Today: \(currentWeather.description). The highest temperature is \(todayData.tempMax)°C. The lowest temperature is \(todayData.tempMin)°C."
+                        let cellModel = DescriptionCellModel(descriptionText: text)
+                        cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
+                    }
                 }
                 if indexPath.row == startIndex + 1 {
-                    let cellModel = CurrentWeatherCelllModel(leftTopLabelName: "SUNRISE", leftBottomLabelName: currentWeather.sunriseTime, rightTopLabelName: "SUNSET", rightBottomLabelName: currentWeather.sunsetTime)
+                    let cellModel = CurrentWeatherCellModel(leftTopLabelName: "SUNRISE", leftBottomLabelName: currentWeather.sunriseTime, rightTopLabelName: "SUNSET", rightBottomLabelName: currentWeather.sunsetTime)
                     cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
                 }
                 if indexPath.row == startIndex + 2 {
-                    let cellModel = CurrentWeatherCelllModel(leftTopLabelName: "CLOUDINESS", leftBottomLabelName: currentWeather.cloudiness, rightTopLabelName: "HUMIDITY", rightBottomLabelName: currentWeather.humidity + " %")
+                    let cellModel = CurrentWeatherCellModel(leftTopLabelName: "CLOUDINESS", leftBottomLabelName: currentWeather.cloudiness, rightTopLabelName: "HUMIDITY", rightBottomLabelName: currentWeather.humidity + " %")
                     cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
                 }
                 if indexPath.row == startIndex + 3 {
-                    let cellModel = CurrentWeatherCelllModel(leftTopLabelName: "WIND", leftBottomLabelName: currentWeather.windSpeed, rightTopLabelName: "FEELS LIKE", rightBottomLabelName: currentWeather.feelsLike)
+                    let cellModel = CurrentWeatherCellModel(leftTopLabelName: "WIND", leftBottomLabelName: currentWeather.windSpeed, rightTopLabelName: "FEELS LIKE", rightBottomLabelName: currentWeather.feelsLike)
                     cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
                 }
                 if indexPath.row == startIndex + 4 {
-                    let cellModel = CurrentWeatherCelllModel(leftTopLabelName: "PRECIPITATION", leftBottomLabelName: currentWeather.precipitation, rightTopLabelName: "PRESSURE", rightBottomLabelName: currentWeather.pressure)
+                    let cellModel = CurrentWeatherCellModel(leftTopLabelName: "PRECIPITATION", leftBottomLabelName: currentWeather.precipitation, rightTopLabelName: "PRESSURE", rightBottomLabelName: currentWeather.pressure)
                     cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
                 }
                 if indexPath.row == startIndex + 5 {
-                    let cellModel = CurrentWeatherCelllModel(leftTopLabelName: "VISIBILITY", leftBottomLabelName: currentWeather.visibility, rightTopLabelName: "UV INDEX", rightBottomLabelName: currentWeather.uvindex)
+                    let cellModel = CurrentWeatherCellModel(leftTopLabelName: "VISIBILITY", leftBottomLabelName: currentWeather.visibility, rightTopLabelName: "UV INDEX", rightBottomLabelName: currentWeather.uvindex)
                     cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
                     cell.separatorInset = UIEdgeInsets(top: 0, left: self.tableView.bounds.width, bottom: 0, right: 0)
                 }

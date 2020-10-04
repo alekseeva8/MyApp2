@@ -12,15 +12,10 @@ class DailyForecastCell: UITableViewCell {
     
     static let reuseID = "DailyForecastCell"
     
-    var daily: Daily! {
-        didSet {
-            let data = Converter.convert(daily)
-            weekDayLabel.text = data.weekDay
-            weatherImageView.image = UIImage(named: data.icon)
-            tempMaxLabel.text = data.tempMax
-            tempMinLabel.text = data.tempMin
-        }
-    }
+    var weekDay: String?
+    var icon: String?
+    var temMin: String?
+    var tempMax: String?
     
     private let weekDayLabel: UILabel = {
         let label = UILabel()
@@ -67,5 +62,14 @@ class DailyForecastCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func draw(_ rect: CGRect) {
+        weekDayLabel.text = weekDay
+        tempMaxLabel.text = tempMax
+        tempMinLabel.text = temMin
+        if let icon = icon, icon != "" {
+        weatherImageView.image = UIImage(named: icon)
+        }
     }
 }
