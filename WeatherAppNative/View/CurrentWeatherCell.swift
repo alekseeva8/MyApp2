@@ -69,6 +69,7 @@ class CurrentWeatherCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .clear
         isUserInteractionEnabled = false
+        separatorInset = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 15.0)
         
         addSubview(leftTopLabel)
         addSubview(leftBottomLabel)

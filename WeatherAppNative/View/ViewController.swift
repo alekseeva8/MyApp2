@@ -178,6 +178,9 @@ extension ViewController: UITableViewDataSource {
                 if let daily = viewModel.weather.daily?[indexPath.row+1] {
                     let cellModel = DailyForecastCellModel(daily: daily)
                     cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
+                    if indexPath.row == daysCount-1 {
+                        cell.separatorInset = UIEdgeInsets.zero
+                    }
                 }
             default:
                 let startIndex = daysCount
@@ -205,6 +208,7 @@ extension ViewController: UITableViewDataSource {
                 if indexPath.row == startIndex + 5 {
                     let cellModel = CurrentWeatherCelllModel(leftTopLabelName: "VISIBILITY", leftBottomLabelName: currentWeather.visibility, rightTopLabelName: "UV INDEX", rightBottomLabelName: currentWeather.uvindex)
                     cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
+                    cell.separatorInset = UIEdgeInsets(top: 0, left: self.tableView.bounds.width, bottom: 0, right: 0)
                 }
             }
         }

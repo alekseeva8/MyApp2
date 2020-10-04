@@ -35,9 +35,10 @@ class DescriptionCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .clear
         isUserInteractionEnabled = false
+        separatorInset = UIEdgeInsets.zero
         
         addSubview(descriptionLabel)
-        descriptionLabel.anchor(top: nil, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 10, paddingBottom: 5, paddingRight: 10, width: 0, height: 0)
+        descriptionLabel.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, paddingTop: 10, paddingLeft: 10, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
     }
     
     required init?(coder: NSCoder) {
