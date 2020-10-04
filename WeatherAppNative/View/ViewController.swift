@@ -162,13 +162,10 @@ extension ViewController: UITableViewDataSource {
         case .firstSection:
             switch indexPath.row {
             case 0:
-                //let cellModel = TemperatureCellModel(viewModel: viewModel)
-                //let data = Converter.convert(viewModel)
                 let cellModel = TemperatureCellModel(temperature: currentWeather.temperature)
                 cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
             default:
                 if let daily = viewModel.weather.daily?[indexPath.row] {
-                    //let cellModel = TodayCellModel(daily: daily)
                     let data = Converter.convert(daily)
                     let cellModel = TodayCellModel(weekDay: data.weekDay, temMin: data.tempMin, tempMax: data.tempMax)
                     cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
@@ -182,7 +179,6 @@ extension ViewController: UITableViewDataSource {
             switch  isDailyForecastRow {
             case true:
                 if let daily = viewModel.weather.daily?[indexPath.row+1] {
-                    //let cellModel = DailyForecastCellModel(daily: daily)
                     let data = Converter.convert(daily)
                     let cellModel = DailyForecastCellModel(weekDay: data.weekDay, icon: data.icon, temMin: data.tempMin, tempMax: data.tempMax)
                     cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
@@ -192,9 +188,7 @@ extension ViewController: UITableViewDataSource {
                 }
             default:
                 let startIndex = daysCount
-                //let currentWeather = Converter.convert(viewModel)
                 if indexPath.row == startIndex {
-                    //let cellModel = DescriptionCellModel(viewModel: viewModel)
                     if let today = viewModel.weather.daily?.first {
                         let todayData = Converter.convert(today)
                         let text = "Today: \(currentWeather.description). The highest temperature is \(todayData.tempMax)°C. The lowest temperature is \(todayData.tempMin)°C."

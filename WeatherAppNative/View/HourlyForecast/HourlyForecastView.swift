@@ -61,15 +61,15 @@ extension HourlyForecastView: UICollectionViewDataSource {
                 cell.icon = data.icon
             }
             let temperature = Converter.convert(viewModel).temperature
-            cell.temperature = temperature + "°"
+            cell.temperature = temperature
             
         default: 
-            if let hourlyForecast = viewModel.weather.hourly {
-                let hourForecast = hourlyForecast[indexPath.item]
-                let data = Converter.convert(hourForecast)
+            if let hourlyArray = viewModel.weather.hourly {
+                let hourly = hourlyArray[indexPath.item]
+                let data = Converter.convert(hourly)
                 cell.hour = data.hour
                 cell.icon = data.icon
-                cell.temperature = data.temperature + "°"
+                cell.temperature = data.temperature
             }
         }
         return cell

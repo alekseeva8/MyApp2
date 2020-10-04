@@ -89,7 +89,7 @@ struct Converter {
         let hour = convert(unixTime: unixTime, with: "HH")
         
         let tempDouble = hourly.temp
-        let temperature = convert(tempDouble)
+        let temperature = convert(tempDouble) + "°"
         
         let icon = hourly.weather.first?.icon ?? ""
         
