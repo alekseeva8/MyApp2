@@ -42,7 +42,7 @@ class TableViewDataSource: NSObject, UITableViewDataSource {
                 let cellModel = TemperatureCellModel(temperature: currentWeather.temperature)
                 cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
             default:
-                if let daily = viewModel.weather.daily?[indexPath.row] {
+                if let daily = viewModel.weather.daily?.first {
                     let data = Converter.convert(daily)
                     let cellModel = TodayCellModel(weekDay: data.weekDay, temMin: data.tempMin, tempMax: data.tempMax)
                     cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
