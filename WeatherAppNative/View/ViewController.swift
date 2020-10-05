@@ -52,14 +52,8 @@ class ViewController: UIViewController {
     private var locationManagerDelegate: LocationManagerDelegate?
     private var locationManager = CLLocationManager()
     
-    private let headerViewHight = CGFloat(120)
-    
-    private enum SectionCategory {
-    case firstSection 
-    case secondSection
-    }
-    
-    private let sections: [SectionCategory] = [.firstSection, .secondSection]
+    private var tableViewDelegate: UITableViewDelegate?
+    private var tableViewDataSource: UITableViewDataSource?
     
     override func loadView() {
         super.loadView()
@@ -89,7 +83,6 @@ class ViewController: UIViewController {
     }
     
     private func configure() {
-        
         view.addSubview(locationLabel)
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
         locationLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 25).isActive = true
@@ -109,8 +102,19 @@ class ViewController: UIViewController {
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        tableView.dataSource = self
-        tableView.delegate = self
+        tableViewDataSource = TableViewDataSource()
+        tableView.dataSource = tableViewDataSource
+        if let tableViewDataSource = tableViewDataSource as? TableViewDataSource {
+            tableViewDataSource.viewModel = self.viewModel
+            tableViewDataSource.tableView = self.tableView
+        }
+        tableViewDelegate = TableViewDelegate()
+        tableView.delegate = tableViewDelegate
+        if let tableViewDelegate = tableViewDelegate as? TableViewDelegate {
+            tableViewDelegate.viewModel = self.viewModel
+            tableViewDelegate.tableView = self.tableView
+        }
+        
         tableView.register(TemperatureCell.self, forCellReuseIdentifier: TemperatureCell.reuseID)
         tableView.register(TodayCell.self, forCellReuseIdentifier: TodayCell.reuseID)
         tableView.register(DailyForecastCell.self, forCellReuseIdentifier: DailyForecastCell.reuseID)
@@ -133,184 +137,5 @@ extension ViewController: ViewModelDelegate {
         configure()
         configureTableView()
         tableView.reloadData()
-    }
-}
-
-//MARK: - UITableViewDataSource
-extension ViewController: UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        sections.count
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch sections[section] {
-        case .firstSection: 
-            return 2
-        case .secondSection:
-            let dailyCount = viewModel.weather.daily?.count ?? 0
-            let daysCount = dailyCount - 1
-            return daysCount + 6
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = UITableViewCell()
-        let currentWeather = Converter.convert(viewModel)
-        
-        switch sections[indexPath.section] {
-        case .firstSection:
-            switch indexPath.row {
-            case 0:
-                let cellModel = TemperatureCellModel(temperature: currentWeather.temperature)
-                cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
-            default:
-                if let daily = viewModel.weather.daily?[indexPath.row] {
-                    let data = Converter.convert(daily)
-                    let cellModel = TodayCellModel(weekDay: data.weekDay, temMin: data.tempMin, tempMax: data.tempMax)
-                    cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
-                }
-            }
-        case .secondSection:
-            let dailyCount = viewModel.weather.daily?.count ?? 0
-            let daysCount = dailyCount - 1
-            let isDailyForecastRow = indexPath.row < daysCount
-            
-            switch  isDailyForecastRow {
-            case true:
-                if let daily = viewModel.weather.daily?[indexPath.row+1] {
-                    let data = Converter.convert(daily)
-                    let cellModel = DailyForecastCellModel(weekDay: data.weekDay, icon: data.icon, temMin: data.tempMin, tempMax: data.tempMax)
-                    cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
-                    if indexPath.row == daysCount-1 {
-                        cell.separatorInset = UIEdgeInsets.zero
-                    }
-                }
-            default:
-                let startIndex = daysCount
-                if indexPath.row == startIndex {
-                    if let today = viewModel.weather.daily?.first {
-                        let todayData = Converter.convert(today)
-                        let text = "Today: \(currentWeather.description). The highest temperature is \(todayData.tempMax)°C. The lowest temperature is \(todayData.tempMin)°C."
-                        let cellModel = DescriptionCellModel(descriptionText: text)
-                        cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
-                    }
-                }
-                if indexPath.row == startIndex + 1 {
-                    let cellModel = CurrentWeatherCellModel(leftTopLabelName: "SUNRISE", leftBottomLabelName: currentWeather.sunriseTime, rightTopLabelName: "SUNSET", rightBottomLabelName: currentWeather.sunsetTime)
-                    cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
-                }
-                if indexPath.row == startIndex + 2 {
-                    let cellModel = CurrentWeatherCellModel(leftTopLabelName: "CLOUDINESS", leftBottomLabelName: currentWeather.cloudiness, rightTopLabelName: "HUMIDITY", rightBottomLabelName: currentWeather.humidity + " %")
-                    cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
-                }
-                if indexPath.row == startIndex + 3 {
-                    let cellModel = CurrentWeatherCellModel(leftTopLabelName: "WIND", leftBottomLabelName: currentWeather.windSpeed, rightTopLabelName: "FEELS LIKE", rightBottomLabelName: currentWeather.feelsLike)
-                    cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
-                }
-                if indexPath.row == startIndex + 4 {
-                    let cellModel = CurrentWeatherCellModel(leftTopLabelName: "PRECIPITATION", leftBottomLabelName: currentWeather.precipitation, rightTopLabelName: "PRESSURE", rightBottomLabelName: currentWeather.pressure)
-                    cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
-                }
-                if indexPath.row == startIndex + 5 {
-                    let cellModel = CurrentWeatherCellModel(leftTopLabelName: "VISIBILITY", leftBottomLabelName: currentWeather.visibility, rightTopLabelName: "UV INDEX", rightBottomLabelName: currentWeather.uvindex)
-                    cell = tableView.dequeueReusableCell(with: cellModel, for: indexPath)
-                    cell.separatorInset = UIEdgeInsets(top: 0, left: self.tableView.bounds.width, bottom: 0, right: 0)
-                }
-            }
-        }
-        return cell
-    }
-}
-
-//MARK: - UITableViewDelegate
-extension ViewController: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch sections[section] {
-        case .firstSection:
-            return 0
-        case .secondSection:
-            return headerViewHight
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        switch sections[section] {
-        case .firstSection:
-            return nil
-        case .secondSection:
-            return HourlyForecastView(viewModel: viewModel)
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch sections[indexPath.section] {
-        case .firstSection:
-            switch indexPath.row {
-            case 0:
-                return 140
-            default:
-                return 40
-            }
-        case .secondSection: 
-            let dailyCount = viewModel.weather.daily?.count ?? 0
-            let daysCount = dailyCount - 1
-            switch indexPath.row {
-            case daysCount:
-                return 70
-            case daysCount + 1, daysCount + 2, daysCount + 3, daysCount + 4, daysCount + 5:
-                return 65
-            default:
-                return 40
-            }
-        }
-    }
-}
-
-//MARK: - Scrolling
-extension ViewController {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        if scrollView.contentOffset.y >= 0.0 {
-            let offset = abs(pow(scrollView.contentOffset.y, 1.1))
-            if let temperatureCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) {
-                changeTransparency(of: temperatureCell, offset: offset) 
-            }
-            if let todayCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) {
-                changeTransparency(of: todayCell, offset: offset)
-            } 
-        }
-        
-        for cell in tableView.visibleCells {
-            let paddingToDisapear = headerViewHight
-            let hiddenFrameHeight = scrollView.contentOffset.y + paddingToDisapear - cell.frame.origin.y
-            if (hiddenFrameHeight >= 0 || hiddenFrameHeight <= cell.frame.size.height) {
-                let temperatureCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0))
-                if cell != temperatureCell {
-                    mask(cell: cell, fromTop: hiddenFrameHeight)
-                }
-            }
-        }
-    }
-    
-    // MARK: - make cells invisible under the headerView
-    func mask(cell: UITableViewCell, fromTop margin: CGFloat) {
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = cell.bounds
-        gradientLayer.colors = [UIColor.white.withAlphaComponent(0).cgColor, UIColor.white.withAlphaComponent(1).cgColor]
-        let marginNumb = margin as NSNumber
-        gradientLayer.locations = [marginNumb, marginNumb]
-        cell.layer.mask = gradientLayer
-        cell.layer.masksToBounds = true
-    }
-    
-    // MARK: - changing cell's transperancy
-    func changeTransparency(of cell: UITableViewCell, offset: CGFloat) { 
-        if offset <= 100 {
-            cell.alpha = 1.0 - (offset / 100)
-        } else {
-            cell.alpha = 0.0
-        }
     }
 }
