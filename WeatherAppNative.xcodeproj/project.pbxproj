@@ -36,7 +36,6 @@
 		F3E2AEFC25287A8E00C5F980 /* TemperatureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E2AEFB25287A8E00C5F980 /* TemperatureCell.swift */; };
 		F3E2AEFE252883C400C5F980 /* TodayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E2AEFD252883C400C5F980 /* TodayCell.swift */; };
 		F3E3942E2521CB7F007F983F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E3942D2521CB7F007F983F /* AppDelegate.swift */; };
-		F3E394302521CB7F007F983F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E3942F2521CB7F007F983F /* SceneDelegate.swift */; };
 		F3E394322521CB7F007F983F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E394312521CB7F007F983F /* ViewController.swift */; };
 		F3E394372521CB82007F983F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F3E394362521CB82007F983F /* Assets.xcassets */; };
 		F3E3943A2521CB82007F983F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F3E394382521CB82007F983F /* LaunchScreen.storyboard */; };
@@ -73,7 +72,6 @@
 		F3E2AEFD252883C400C5F980 /* TodayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayCell.swift; sourceTree = "<group>"; };
 		F3E3942A2521CB7F007F983F /* WeatherAppNative.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherAppNative.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3E3942D2521CB7F007F983F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		F3E3942F2521CB7F007F983F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		F3E394312521CB7F007F983F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		F3E394362521CB82007F983F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F3E394392521CB82007F983F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -332,7 +330,6 @@
 				F3CBC77725233B4100F8AF7C /* Common Files */,
 				F3CBC787252497A200F8AF7C /* Storage */,
 				F3E3942D2521CB7F007F983F /* AppDelegate.swift */,
-				F3E3942F2521CB7F007F983F /* SceneDelegate.swift */,
 				F3E394382521CB82007F983F /* LaunchScreen.storyboard */,
 				F3E394362521CB82007F983F /* Assets.xcassets */,
 				F3E3943B2521CB82007F983F /* Info.plist */,
@@ -440,7 +437,6 @@
 				F3CBC77925233B6600F8AF7C /* Alert.swift in Sources */,
 				F39EA2E4252A784700EC24D4 /* TodayCellModel.swift in Sources */,
 				F3E2AEF2252639EB00C5F980 /* UIView.swift in Sources */,
-				F3E394302521CB7F007F983F /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -579,6 +575,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9W292R69FX;
 				INFOPLIST_FILE = WeatherAppNative/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -597,6 +594,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9W292R69FX;
 				INFOPLIST_FILE = WeatherAppNative/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
